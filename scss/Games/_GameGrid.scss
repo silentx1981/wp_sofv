@@ -1,0 +1,10 @@
+.sofvGameGrid {
+  display: grid;
+  overflow: hidden;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-gap: 1em;
+}
+
+.sofvGameGridItem {
+  margin-right: 10px;
+}
