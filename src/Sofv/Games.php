@@ -183,6 +183,10 @@ class Games
 			if ($element instanceof DOMElement)
 				$result = $this->parseCurrentGameLines($element, $result);
 		}
+		$result = array_filter($result, function($value) {
+			$teamA = $value['teamA'] ?? null;
+			return !empty($teamA);
+		});
 
 		return $result;
 	}
@@ -198,7 +202,11 @@ class Games
 			$dateValue->setTime(0, 0, 0);
 			$result[] = $this->prototypeGame;
 			$result[count($result) - 1]['date'] = $dateValue;
-		} else if (mb_strpos($class, 'col-md-1 time col-xs-12') !== false) {
+		} else if (mb_strpos($class, 'list-group-item') !== false) {
+			$lastDate = clone $result[count($result) -1]['date'];
+			$result[] = $this->prototypeGame;
+			$result[count($result) - 1]['date'] = $lastDate;
+		}else if (mb_strpos($class, 'col-md-1 time col-xs-12') !== false) {
 			/** @var DateTime $date */
 			$date = $result[count($result) -1]['date'];
 			$timeEx = explode(":", $element->nodeValue);
@@ -213,7 +221,11 @@ class Games
 				$result[count($result) -1]['hometeam'] = 'teamB';
 		} else if (mb_strpos($class, 'sppStatusText') !== false) {
 			$result[count($result) - 1]['status'] = $element->nodeValue;
-		} else if (mb_strpos($class, 'col-xs-11 col-md-offset-1 font-small') !== false) {
+		} else if (mb_strpos($class, 'col-xs-12 col-md-5 torA') !== false) {
+			$result[count($result) - 1]['resultA'] = $element->nodeValue;
+		} else if (mb_strpos($class, 'col-xs-12 col-md-5 torB') !== false) {
+			$result[count($result) - 1]['resultB'] = $element->nodeValue;
+		}else if (mb_strpos($class, 'col-xs-11 col-md-offset-1 font-small') !== false) {
 			$elements = $element->getElementsByTagName('span');
 			foreach ($elements as $elementSub)
 				$result = $this->parseCurrentGameLines($elementSub, $result);
@@ -399,7 +411,7 @@ class Games
 							<div class="align-self-start '.($game['homeA'] ?? null).'">
 								'.$game['teamA'].'
 							</div>
-							<div class="'.($game['homeB'] ?? null).'">
+							<div class="'.($game['homeA'] ?? null).'">
 								'.$game['resultA'].'
 							</div>
 						</div>
