@@ -57,6 +57,10 @@ class Games
 		else if ($this->type === 'all')
 			$result = $this->getAllGames();
 
+		foreach ($result as &$game) {
+			$game['type'] = preg_replace('/[-\/]{1}.*?$/', '', $game['type']);
+		}
+
 		if ($groupBy === 'day')
 			$result = $this->groupByDay($result);
 
@@ -163,7 +167,6 @@ class Games
 				$result[count($result) -1]['type'] = trim(preg_replace('/'.addcslashes($result[count($result) -1]['status'], '()./\'"').'.*/s', '', $element->nodeValue));
 			else
 				$result[count($result) -1]['type'] = preg_replace('/Spielnummer.*/s', '', $element->nodeValue);
-			$result[count($result) -1]['type'] = preg_replace('/[-\/]{1}.*?$/', '', $result[count($result) -1]['type']);
 			$gamenumber = trim(preg_replace('/.*Spielnummer/s', '', $element->nodeValue));
 			$gamenumber = preg_replace('/(&nbsp;){1,}/', '', $gamenumber);
 			if (preg_match_all('/[0-9]*/s', $gamenumber, $gamenumberMatch))
