@@ -58,7 +58,7 @@ class Games
 			$result = $this->getAllGames();
 
 		foreach ($result as &$game) {
-			$game['type'] = preg_replace('/[-\/]{1}.*?$/', '', $game['type']);
+			$game['type'] = preg_replace('/[-\/\(]{1}.*?$/', '', $game['type']);
 		}
 
 		if ($groupBy === 'day')
