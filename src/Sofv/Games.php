@@ -10,6 +10,7 @@ use Silentx\Wp\Date;
 class Games
 {
 	private string $url;
+	private string $baseUrl;
 	private string $type;
 	private array $cacheTeam = [];
 	private DateTimeZone $timezone;
@@ -24,11 +25,14 @@ class Games
 		'gamenumber' => '',
 		'location'   => '',
 		'hometeam'   => '',
+		'detaillink' => '',
 	];
 
 	public function __construct(string $url, string $type)
 	{
 		$this->url = $url;
+		$parsedUrl = parse_url($url);
+		$this->baseUrl = "$parsedUrl[scheme]://$parsedUrl[host]";
 		$this->type = $type;
 		$this->timezone = new DateTimeZone(wp_timezone_string());
 	}
@@ -241,6 +245,10 @@ class Games
 			if (preg_match_all('/[0-9]*/s', $gamenumber, $gamenumberMatch))
 				$result[count($result) -1]['gamenumber'] = $gamenumberMatch[0][2] ?? null;
 			$result[count($result) -1]['location'] = trim(preg_replace('/.*'.$result[count($result) -1]['gamenumber'].'/s', '', $element->nodeValue));
+		}else if (mb_strpos($class, 'col-xs-1 text-right') !== false) {
+			$elements = $element->getElementsByTagName('a');
+			foreach ($elements as $elementSub)
+				$result[count($result) - 1]['detaillink'] = $elementSub->getAttribute('href');
 		}
 
 		return $result;
@@ -397,17 +405,24 @@ class Games
 			$game['homeA'] = 'fw-bold';
 		if ($game['hometeam'] === 'teamB')
 			$game['homeB'] = 'fw-bold';
+		if ($game ['detaillink'])
+			$detaillink = ' <a href="'.$this->baseUrl.'/'.$game['detaillink'].'" target="_blank">
+								<i class="far fa-2x fa-list-alt"></i>
+							</a>';
 
 		$result = '	<div class="">
 						<div class="badge bg-primary w-100 mb-3">
 							'.$game['type'].'
 						</div>
-						<div class="d-flex mb-2">
+						<div class="d-flex mb-3">
 							<div class="align-self-start text-center ps-2 me-2">
 								<i class="far fa-2x fa-clock"></i>
 							</div>
 							<div class="align-self-center">
 								'.Date::dateFormat($game['date'], 'H:i').'
+							</div>
+							<div class="align-self-center ms-auto">
+								'.($detaillink ?? '').'
 							</div>
 						</div>
 						<div class="d-flex justify-content-between">
