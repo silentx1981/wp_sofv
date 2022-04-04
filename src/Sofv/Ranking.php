@@ -145,15 +145,15 @@ class Ranking
 	private function renderRank($rank)
 	{
 		$result = '	<tr class="'.($rank['hometeam'] === true ? 'table-primary' : '') .'">
-						<td class="text-center" data-title="Rang">'.$rank['rank'].'</td>
-						<td data-title="Mannschaft">'.$rank['team'].'</td>
-						<td class="text-center" data-title="Spiele">'.$rank['games'].'</td>
-						<td class="text-center" data-title="Siege">'.$rank['wins'].'</td>
-						<td class="text-center" data-title="Unentschieden">'.$rank['ties'].'</td>
-						<td class="text-center" data-title="Niederlagen">'.$rank['losts'].'</td>
-						<td class="text-center" data-title="Strafpunkte">'.$rank['penalties'].'</td>
-						<td class="text-center" data-title="Tore">'.$rank['goals'].' : '.$rank['goalsagainst'].'</td>
-						<td class="text-center" data-title="Punkte">'.$rank['points'].'</td>
+						<td class="text-center" data-title="Rang" style="padding: 6px 24px !important">'.$rank['rank'].'</td>
+						<td data-title="Mannschaft" style="padding: 6px 24px !important">'.$rank['team'].'</td>
+						<td class="text-center" data-title="Spiele" style="padding: 6px 24px !important">'.$rank['games'].'</td>
+						<td class="text-center" data-title="Siege" style="padding: 6px 24px !important">'.$rank['wins'].'</td>
+						<td class="text-center" data-title="Unentschieden" style="padding: 6px 24px !important">'.$rank['ties'].'</td>
+						<td class="text-center" data-title="Niederlagen" style="padding: 6px 24px !important">'.$rank['losts'].'</td>
+						<td class="text-center" data-title="Strafpunkte" style="padding: 6px 24px !important">'.$rank['penalties'].'</td>
+						<td class="text-center" data-title="Tore" style="padding: 6px 24px !important">'.$rank['goals'].' : '.$rank['goalsagainst'].'</td>
+						<td class="text-center" data-title="Punkte" style="padding: 6px 24px !important">'.$rank['points'].'</td>
 					</tr>';
 
 		return $result;
