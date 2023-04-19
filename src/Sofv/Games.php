@@ -139,8 +139,9 @@ class Games
 		$result = $data;
 
 		if (mb_strpos($class, 'list-group-item sppTitel') !== false) {
-			$dateValue = explode('.', mb_substr($element->nodeValue, 3));
-			$dateValue = new DateTime($dateValue[2] . "-" . $dateValue[1] . "-" . $dateValue[0], $this->timezone);
+		        $dateValue = explode('.', $element->nodeValue);
+			$day = (int) preg_replace('/[A-Za-z]*/', '', $dateValue[0]);
+			$dateValue = new DateTime($dateValue[2] . "-" . $dateValue[1] . "-" . $day, $this->timezone);
 			$dateValue->setTime(0, 0, 0);
 			$result[] = $this->prototypeGame;
 			$result[count($result) - 1]['date'] = $dateValue;
